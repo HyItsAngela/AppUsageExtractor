@@ -1,0 +1,17 @@
+debug: False  # Toggle debug outputs
+progress_bar: True  # Enable/disable tqdm
+progress_style: "rich"  # Options: "basic", "rich", "ascii"
+
+text_correction:  
+  app_names_json: "data/scraped_app_names-cleaned.json"
+  min_match_score: 80
+
+output:
+    formats: ["csv", "database"]  # Choose one or both
+    csv_path: "data/output/results.csv"
+    database_uri: "sqlite:///data/output/usage.db"
+    
+csv_settings:
+  required_columns: ['session_id', 'id', 'total_usage', 'app_name', 'app_usage']
+  error_value: "-1"
+  time_format: "compact"
