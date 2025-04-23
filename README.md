@@ -38,22 +38,32 @@ An end-to-end computer vision pipeline that detects smartphone app interfaces us
 
 ## 📂 Output Structure
 results/
+
 ├── id_folders/
+
 │   └── ID_OWL1234/
+
 │       ├── original_image.jpg
+
 │       └── ocr_results.txt
+
 ├── debug_visualizations/  # Only when debug=true
+
 │   └── debug_image.jpg
+
 ├── usage_report.csv
+
 └── usage.db               # SQLite database
+
 
 CSV Output Example
 
 id,total_usage,Facebook,Instagram,WhatsApp
+
 OWL1234,2h30m,45m,1h15m,30m
 
 ## Model Information
-#Custom YOLO Model
+# Custom YOLO Model
 
 - Trained on 3,376 smartphone screenshots
 - Classes: app_icon, app_name, app_usage, id
@@ -62,9 +72,13 @@ OWL1234,2h30m,45m,1h15m,30m
   
 # Model Directory Structure
 models/
+
 └── yolo/
+
     ├── args.yaml
+    
     └── weights/
+    
         └── best.pt      # Trained weights (Git LFS)
 
 ## Troubleshooting
