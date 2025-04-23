@@ -1,9 +1,9 @@
-# SmartApp-Usage-Extractor -- YOLO-to-OCR Smartphone App Usage Pipeline
+# SmartApp-Usage-Extractor
 Undergraduate research project conducted for Dr. Dougall at UTA, combining computer vision and OCR to analyze smartphone app usage patterns. Developed as a capstone project, this pipeline detects app interfaces using custom YOLO models and extracts usage data through multi-stage OCR processing.
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
-
+YOLO-to-OCR Smartphone App Usage Pipeline
 An end-to-end computer vision pipeline that detects smartphone app interfaces using YOLO object detection and extracts usage statistics through OCR text recognition.
 
 ![Pipeline Visualization](docs/pipeline_diagram.png)
