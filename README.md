@@ -1,6 +1,7 @@
 # SmartApp-Usage-Extractor
 
-[Build in Progress!]
+> [!NOTE]
+> [Build in Progress!]
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 
@@ -36,23 +37,15 @@ An end-to-end computer vision pipeline that detects smartphone app interfaces us
   - Debug visualizations (toggleable)
 
 ## 📂 Output Structure
-results/
-
-├── id_folders/
-
-│   └── ID_OWL1234/
-
-│       ├── original_image.jpg
-
-│       └── ocr_results.txt
-
-├── debug_visualizations/  # Only when debug=true
-
-│   └── debug_image.jpg
-
-├── usage_report.csv
-
-└── usage.db               # SQLite database
+results/  
+├── id_folders/  
+│   └── ID_OWL1234/  
+│       ├── original_image.jpg  
+│       └── ocr_results.txt  
+├── debug_visualizations/  # Only when debug=true  
+│   └── debug_image.jpg  
+├── usage_report.csv  
+└── usage.db               # SQLite database  
 
 
 CSV Output Example
@@ -70,18 +63,15 @@ OWL1234,2h30m,45m,1h15m,30m
 - Input resolution: 1040x1040
   
 # Model Directory Structure
-models/
 
-└── yolo/
+models/  
+└── yolo/  
+    ├── args.yaml  
+    └── weights/  
+        └── best.pt      # Trained weights (Git LFS)  
 
-    ├── args.yaml
-    
-    └── weights/
-    
-        └── best.pt      # Trained weights (Git LFS)
-
-## Troubleshooting
-# Current version
+> [!CAUTION] 
+> Current version Limitations
 - Needs to improve OCR accuracy
 
 ## 📦 Installation
@@ -103,7 +93,7 @@ pip install -r requirements.txt
 # Optional: GPU acceleration for PaddleOCR
 pip install paddlepaddle-gpu
 
-## 🛠️ Usage
+## Usage
 # Process single image
 python scripts/process_image.py \
   --input sample.jpg \
