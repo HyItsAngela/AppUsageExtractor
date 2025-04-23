@@ -48,14 +48,14 @@ results/
 └── usage.db               # SQLite database  
 
 
-CSV Output Example
+**CSV Output Example**
 
 id,total_usage,Facebook,Instagram,WhatsApp
 
 OWL1234,2h30m,45m,1h15m,30m
 
 ## Model Information
-# Custom YOLO Model
+**Custom YOLO Model**
 
 - Trained on 3,376 smartphone screenshots
 - Classes: app_icon, app_name, app_usage, id
@@ -71,16 +71,16 @@ models/
         └── best.pt      # Trained weights (Git LFS)  
 
 > [!CAUTION] 
-> Current version Limitations
-- Needs to improve OCR accuracy
+> Current version Limitations:
+> - Needs to improve OCR accuracy
 
 ## 📦 Installation
 
 ```bash
 # Clone with Git LFS for model weights
 git lfs install
-git clone https://github.com/yourusername/yolo-ocr-pipeline
-cd yolo-ocr-pipeline
+git clone https://github.com/HyItsAngela/SmartApp-Usage-Extractor
+cd SmartApp-Usage-Extractor
 
 # Create virtual environment
 python -m venv .venv
