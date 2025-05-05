@@ -1,0 +1,49 @@
+# Core Settings
+model_path: "models/weights/best.pt"
+ocr_lang: 'en'
+use_gpu_ocr: false # Set true if paddlepaddle-gpu installed
+
+# Class Name Mapping
+class_names:
+  0: 'id'
+  1: 'app_icon'
+  2: 'app_name'
+  3: 'app_usage'
+
+# Derived class names
+id_class_name: 'id'
+app_name_class_name: 'app_name'
+app_usage_class_name: 'app_usage'
+
+# Path to Known App Names JSON
+app_names_json_path: "scraped_app_names-cleaned.json"
+
+# Tolerances for layout analysis
+reference_line_tolerance: 5 
+row_group_tolerance: 10    
+
+# Parameters for find_reference_line
+ref_line_min_icons: 3    # Minimum icons needed to form a line
+ref_line_max_gap: 250   # Max distance (pixels) between consecutive icons in a line
+ref_line_max_angle: 35   # Max angle deviation (degrees) between segments
+
+
+# Parsing & Layout Configuration
+fuzzy_name_threshold: 90             # Primary threshold for match_app_name
+fuzzy_name_secondary_threshold: 75   # Secondary threshold for match_app_name
+fuzzy_char_threshold: 85             # Char similarity threshold for fuzzy_replace_characters
+fuzzy_word_threshold: 80             # Overall word similarity threshold for fuzzy_replace_characters
+
+# Threshold for the get_best_match
+original_fuzzy_score_cutoff: 85
+
+# Regex for the time parsing (minutes-based, 'Xh Ym' format)
+time_regex: '(\d+)\s*h(?:our)?s?\s*(\d+)\s*m(?:in)?|(\d+)\s*h(?:our)?s?|(\d+)\s*m(?:in)?'
+
+# Feature Settings
+output_formats: ['csv', 'db', 'txt'] # Default formats to save
+results_dir: "results"             # Base output directory
+debug_dir: "debug_visualizations"    # Subdir for debug images
+csv_filename: "usage_report.csv"     # Name for CSV output
+db_filename: "usage.db"              # Name for SQLite output
+debug_default: false             # Default debug mode (overridden by script flags)
