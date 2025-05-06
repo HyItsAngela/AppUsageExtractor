@@ -7,7 +7,7 @@ import json
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from src import config_loader, data_processor, detection, image_utils, ocr, output_handler, utils
+from src import config_loader, processor, detection, image_utils, ocr, output_handler, utils
 
 # Setup logging
 utils.setup_logging()  
