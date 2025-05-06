@@ -12,7 +12,7 @@ python-levenshtein
 torch==2.3.1
 torchvision==0.18.1
 numpy==1.24.4
-scipy==1.13.1
+scipy==1.10.1
 scikit-learn==1.6.1
 pillow==10.4.0
 matplotlib==3.9.4
