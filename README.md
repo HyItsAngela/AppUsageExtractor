@@ -207,8 +207,8 @@ Batch Processing Rate
 
 | Mode         | Images Processed | Total Time (hh\:mm\:ss) | Images per Minute | Images per Second |
 | ------------ | ---------------- | ----------------------- | ----------------- | ----------------- |
-| --debug    | 3,376            | 03:53:13                | 14.47             | 0.241             |
-| no --debug | 3,376            | x                       | x                 | x                 |
+| --debug      | 3,376            | 03:53:13                | 14.47             | 0.241             |
+| no --debug   | 3,376            | x                       | x                 | x                 |
 ```
 > [!NOTE]
 > Enabling `--debug` significantly increases processing time due to saving detailed logs and generating/saving visualization images for each input image.
