@@ -51,10 +51,12 @@ SmartApp-Usage-Extractor/
 ├── configs/           # Configuration templates
 │   └── default.yaml
 ├── data/              # Optional: For sample input images
+│   ├── scraped_app_named-cleaned.json   # List of app names
 │   └── samples/
 │       └── sample_screenshot.jpg
 ├── docs/              # Documentation
-│   └── pipeline_diagram.png
+│   ├── pipeline_diagram.png
+│   └── results.jpg
 ├── models/
 │   ├── args.yaml       # Training configuration
 │   └── weights/        # Model parameters (Git LFS)
