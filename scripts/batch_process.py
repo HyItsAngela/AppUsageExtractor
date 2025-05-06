@@ -4,10 +4,12 @@ import os
 import sys
 import time
 import json
+import re
+from collections import defaultdict
 
 sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
-from src import config_loader, processor, detection, image_utils, ocr, output_handler, utils
+from src import config_loader, processor, detection, image_utils, ocr, output_handler, utils, parsing
 
 # Setup logging
 utils.setup_logging() 
@@ -69,6 +71,13 @@ def main():
     # Determine output directory
     results_dir = args.output_dir or config.get('results_dir', 'results')  # Use arg or config default
 
+    # Find Input Files
+    image_files = find_image_files(args.input_dir)
+    if not image_files:
+        logger.error(f"No image files found in directory: {args.input_dir}")
+        sys.exit(1)
+    logger.info(f"Found {len(image_files)} images to process in {args.input_dir}")
+
     # Model Initialization
     try:
         logger.info("Loading models...")
@@ -79,77 +88,66 @@ def main():
         logger.exception(f"Failed to initialize models: {e}. Exiting.")  
         sys.exit(1)
 
-    # Processing
-    logger.info(f"Processing image: {args.input}")
-    processed_data = data_processor.process_image_data(
-        args.input,
-        yolo_model,
-        ocr_engine,
-        config,
-        known_app_names_list
-    )
+    # Batch Processing
+    all_results = []
+    logger.info("Starting batch processing...")
+    total_start_time = time.time()
 
-    # Output Saving 
-    image_filename = os.path.basename(args.input)
-    all_results_list = [processed_data]  
-    input_image_array = image_utils.load_image(args.input) 
-
-    # Save standard TXT file
-    if 'txt' in output_formats:
-        output_handler.organize_output_by_id(
-            results_dir,
-            processed_data['id'],
-            args.input,  
-            input_image_array,  
-            processed_data['extracted_data']
+    for image_path in tqdm(image_files, desc="Processing Images"):
+        logger.debug(f"Processing batch image: {image_path}")
+        img_start_time = time.time()
+        processed_data = processor.process_image_data(
+            image_path, yolo_model, ocr_engine, config, known_app_names_list
         )
+        img_end_time = time.time()
+        logger.debug(f"Image {os.path.basename(image_path)} processed in {img_end_time - img_start_time:.2f} seconds.")
+        all_results.append(processed_data)
 
-    # Save aggregated formats
-    if 'csv' in output_formats or 'db' in output_formats:
-        aggregated_dict = {}
-        if processed_data['status'] not in ["Failure", "ID Extraction Failed", "Layout Analysis Failed", "No Detections"] and processed_data['id'] != "UNKNOWN_ID":
-            aggregated_dict[processed_data['id']] = processed_data['extracted_data']
+        # Handle per-image outputs (Standard TXT, Debug Outputs)
+        image_filename = os.path.basename(image_path)
+        input_image_array = None 
+        if 'txt' in output_formats:
+             try:
+                 input_image_array = image_utils.load_image(image_path)
+                 if input_image_array is not None: output_handler.organize_output_by_id(results_dir, processed_data['id'], image_path, input_image_array, processed_data['extracted_data'])
+                 else: logger.error(f"Could not load image {image_path} for standard TXT output.")
+             except Exception as e: logger.error(f"Error saving standard TXT for {image_path}: {e}")
+        if debug_mode:
+            try: output_handler.save_debug_txt(processed_data, results_dir, image_filename)
+            except Exception as e: logger.error(f"Error saving debug TXT for {image_path}: {e}")
+            if processed_data['status'] != 'Failure':
+                if input_image_array is None: input_image_array = image_utils.load_image(image_path)
+                if input_image_array is not None:
+                    try:
+                        vis_image = image_utils.draw_debug_visualizations(input_image_array, processed_data["debug_info"], processed_data["extracted_data"])
+                        debug_output_dir = os.path.join(results_dir, config.get('debug_dir', 'debug_visualizations')); os.makedirs(debug_output_dir, exist_ok=True)
+                        debug_image_filename = f"debug_{os.path.splitext(image_filename)[0]}.jpg"; debug_image_path = os.path.join(debug_output_dir, debug_image_filename)
+                        image_utils.save_image(vis_image, debug_image_path); logger.debug(f"Debug visualization saved to: {debug_image_path}")
+                    except Exception as e: logger.error(f"Error saving debug visualization for {image_path}: {e}")
+                else: logger.error(f"Could not load image {image_path} for debug visualization.")
+        del input_image_array 
 
-        if 'csv' in output_formats:
-            if aggregated_dict:  
-                csv_path = os.path.join(results_dir, config.get('csv_filename', 'usage_report.csv'))
-                output_handler.save_to_csv(aggregated_dict, csv_path)
-            else:
-                logger.warning("No valid data to save to CSV for this image.")
+    total_end_time = time.time()
+    logger.info(f"Batch processing loop finished in {total_end_time - total_start_time:.2f} seconds.")
 
-        if 'db' in output_formats:
-            if processed_data['status'] != "Failure":  
-                db_path = os.path.join(results_dir, config.get('db_filename', 'usage.db'))
-                output_handler.save_aggregated_to_sqlite([processed_data], db_path)
-            else:
-                logger.warning("Skipping DB save due to processing failure.")
-
-    # Debug Outputs (conditional on debug_mode)
-    if debug_mode:
-        logger.info("Debug mode enabled. Saving debug outputs.")
-        output_handler.save_debug_txt(processed_data, results_dir, image_filename)
-
-        # Save visualization image
-        if processed_data['status'] != 'Failure':
-            if input_image_array is None: 
-                input_image_array = image_utils.load_image(args.input)
-
-            if input_image_array is not None:
-                vis_image = image_utils.draw_debug_visualizations(
-                    input_image_array,  
-                    processed_data["debug_info"]  
-                )
-                debug_output_dir = os.path.join(results_dir, config.get('debug_dir', 'debug_visualizations'))
-                os.makedirs(debug_output_dir, exist_ok=True)
-                debug_image_filename = f"debug_{os.path.splitext(image_filename)[0]}.jpg"
-                debug_image_path = os.path.join(debug_output_dir, debug_image_filename)
-                success = image_utils.save_image(vis_image, debug_image_path)
-                if success:
-                    logger.info(f"Debug visualization saved to: {debug_image_path}")
-            else:
-                logger.error("Could not load input image for debug visualization.")
-
-    logger.info(f"Finished processing {args.input}")
+    # Handle aggregated outputs (CSV, SQLite)
+    logger.info("Aggregating results for final outputs...")
+    aggregated_csv_data = defaultdict(list); valid_results_for_aggregation = 0
+    for result in all_results:
+        img_id = result.get('id', 'UNKNOWN_ID')
+        if result['status'] != "Failure" and img_id not in ["PROCESSING_FAILED", "NO_DETECTIONS", "ID Extraction Failed", "UNKNOWN_ID", "OCR_EMPTY", "CROP_FAILED"]:
+            app_list = result.get('extracted_data', [])
+            if app_list: aggregated_csv_data[img_id].extend(app_list); valid_results_for_aggregation += 1
+    if 'csv' in output_formats:
+         if aggregated_csv_data:
+             logger.info(f"Aggregated data for {len(aggregated_csv_data)} unique IDs from {valid_results_for_aggregation} valid processed images.")
+             csv_path = os.path.join(results_dir, config.get('csv_filename', 'usage_report.csv')); output_handler.save_to_csv(aggregated_csv_data, csv_path)
+         else: logger.warning("No valid data aggregated to save to CSV.")
+    if 'db' in output_formats:
+         valid_results_for_db = [r for r in all_results if r['status'] != "Failure" and r['id'] not in ["PROCESSING_FAILED", "NO_DETECTIONS", "ID Extraction Failed", "UNKNOWN_ID", "OCR_EMPTY", "CROP_FAILED"]]
+         if valid_results_for_db: db_path = os.path.join(results_dir, config.get('db_filename', 'usage.db')); output_handler.save_aggregated_to_sqlite(valid_results_for_db, db_path)
+         else: logger.warning("No valid results to save to SQLite DB.")
+    logger.info("All processing finished.")
 
 if __name__ == "__main__":
     main()
