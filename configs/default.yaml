@@ -16,7 +16,7 @@ app_name_class_name: 'app_name'
 app_usage_class_name: 'app_usage'
 
 # Path to Known App Names JSON
-app_names_json_path: "scraped_app_names-cleaned.json"
+app_names_json_path: "data/scraped_app_names-cleaned.json"
 
 # Tolerances for layout analysis
 reference_line_tolerance: 5 
