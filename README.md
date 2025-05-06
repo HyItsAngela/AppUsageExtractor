@@ -108,6 +108,7 @@ results/
 - Classes: app_icon, app_name, app_usage, id
 - mAP@0.5: 0.99
 - Input resolution: 1040x1040
+![YOLO Results](docs/results.png)
   
 ### Model Directory Structure
 ```text
