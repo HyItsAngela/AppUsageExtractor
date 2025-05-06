@@ -45,7 +45,7 @@ def main():
 
     # Load Known App Names from JSON
     known_app_names_list = []
-    app_names_path = config.get('app_names_json_path', 'data/scraped_app_names.json')
+    app_names_path = config.get('app_names_json_path', 'data/scraped_app_names-cleaned.json')
     try:
         with open(app_names_path, 'r') as f:
             known_app_names_list = json.load(f)
