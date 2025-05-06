@@ -48,16 +48,34 @@ An end-to-end computer vision pipeline that detects smartphone app interfaces us
 ## 📂 Project Structure
 ```text
 SmartApp-Usage-Extractor/
-├── configs/              # Configuration templates
-├── data/                 # Sample inputs
-├── docs/                 # Documentation 
+├── configs/           # Configuration templates
+│   └── default.yaml
+├── data/              # Optional: For sample input images
+│   └── samples/
+│       └── sample_screenshot.jpg
+├── docs/              # Documentation
+│   └── pipeline_diagram.png
 ├── models/
-│   └── yolo/            # Custom detection model
-│       ├── args.yaml    # Training configuration
-│       └── weights/     # Model parameters (Git LFS)
-├── results/             # Processing outputs
-├── scripts/             # Execution scripts
-└── src/                 # Core pipeline code
+│   ├── args.yaml       # Training configuration
+│   └── weights/        # Model parameters (Git LFS)
+│         └── best.pt   
+├── results/           # Output directory
+├── scripts/
+│   ├── process_image.py
+│   └── batch_process.py
+├── src/                # Core pipeline code
+│   ├── __init__.py
+│   ├── config_loader.py
+│   ├── data_processor.py
+│   ├── detection.py
+│   ├── image_utils.py
+│   ├── layout_analysis.py
+│   ├── ocr.py
+│   ├── output_handler.py
+│   ├── parsing.py
+│   └── utils.py          # For shared utilities like logging setup         
+├── README.md          
+└── requirements.txt
 ```
 
 ## 💾 Output Structure
@@ -94,10 +112,9 @@ results/
 ### Model Directory Structure
 ```text
 models/
-└── yolo/
-    ├── args.yaml     # Training configuration
-    └── weights/
-        └── best.pt   # Trained model weights (Tracked with Git LFS)
+  ├── args.yaml     # Training configuration
+  └── weights/
+    └── best.pt   # Trained model weights (Tracked with Git LFS)
 ```
 
 > [!IMPORTANT]
