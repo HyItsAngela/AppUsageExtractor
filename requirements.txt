@@ -9,8 +9,8 @@ fuzzywuzzy==0.18.0
 python-levenshtein
 
 # Computer Vision & ML
-torch==2.3.1+cu118
-torchvision==0.18.1+cu118
+torch==2.3.1
+torchvision==0.18.1
 numpy==1.26.0
 scipy==1.13.1
 scikit-learn==1.6.1
