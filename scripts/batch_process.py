@@ -15,6 +15,14 @@ from src import config_loader, processor, detection, image_utils, ocr, output_ha
 utils.setup_logging() 
 logger = logging.getLogger(__name__)
 
+def find_image_files(input_dir):
+    """Finds common image files in a directory."""
+    patterns = ['*.jpg', '*.jpeg', '*.png', '*.bmp', '*.tif', '*.tiff']
+    image_files = []
+    for pattern in patterns:
+        image_files.extend(glob.glob(os.path.join(input_dir, pattern)))
+    return sorted(list(set(image_files)))
+
 def main():
     parser = argparse.ArgumentParser(description="Process a single smartphone usage screenshot (High Fidelity).")
     parser.add_argument("--input-dir", required=True, help="Path to the input image file.")
