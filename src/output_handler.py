@@ -152,7 +152,7 @@ def save_to_csv(aggregated_data_dict, output_csv_path):
                 valid_entries_exist = True
 
         for app_name in sorted_app_names:
-            row[app_name] = app_times_for_id.get(app_name, '0m')
+            row[app_name] = app_times_for_id.get(app_name, '')
 
         if valid_entries_exist:
             row["total_usage"] = format_minutes(total_minutes)
@@ -174,7 +174,7 @@ def save_to_csv(aggregated_data_dict, output_csv_path):
             cols_order.append("total_usage")
         other_cols = sorted([col for col in df.columns if col not in ["id", "total_usage"]])
         final_cols = cols_order + other_cols
-        df = df.reindex(columns=final_cols, fill_value='0m')
+        df = df.reindex(columns=final_cols, fill_value='')
 
         os.makedirs(os.path.dirname(output_csv_path), exist_ok=True)
         df.to_csv(output_csv_path, index=False)
