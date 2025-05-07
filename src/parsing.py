@@ -40,21 +40,30 @@ def parse_time(time_str, regex_pattern):
     return total_minutes
 
 def format_minutes(total_minutes):
-    """Formats total minutes back into 'Xh Ym' string format."""
+    """Formats total minutes back into 'DdHhMm' string format."""
     if total_minutes < 0:
         return "Invalid Time"
     if total_minutes == 0:
         return "0m"
-    hours = total_minutes // 60
-    minutes = total_minutes % 60
+    minutes_in_day = 24 * 60
+    minutes_in_hour = 60
+
+    days = total_minutes // minutes_in_day
+    remaining_minutes = total_minutes % minutes_in_day
+
+    hours = remaining_minutes // minutes_in_hour
+    minutes = remaining_minutes % minutes_in_hour
+
     parts = []
+    if days > 0:
+        parts.append(f"{days}d")
     if hours > 0:
         parts.append(f"{hours}h")
     if minutes > 0:
         parts.append(f"{minutes}m")
     if not parts:
-        return "0m"
-    return "".join(parts)
+         return "0m"
+    return "".join(parts) 
 
 def parse_time_hms_to_seconds(time_str_hms):
     """Parse time string in format like '1h30m15s' into total seconds"""
