@@ -135,8 +135,8 @@ SmartApp-Usage-Extractor/
 ├── models/
 │   ├── args.yaml       # Training configuration
 │   └── weights/        # Model parameters (Git LFS)
-│         └── best.pt   
-├── results/           # Output directory
+│       └── best.pt   
+├── results/            # Output directory
 ├── scripts/
 │   ├── process_image.py
 │   └── batch_process.py
@@ -193,7 +193,7 @@ results/
 models/
   ├── args.yaml     # Training configuration
   └── weights/
-    └── best.pt   # Trained model weights (Tracked with Git LFS)
+      └── best.pt   # Trained model weights (Tracked with Git LFS)
 ```
 
 > [!IMPORTANT]
