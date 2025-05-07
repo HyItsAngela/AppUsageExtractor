@@ -37,7 +37,7 @@ fuzzy_word_threshold: 80             # Overall word similarity threshold for fuz
 # Threshold for the get_best_match
 original_fuzzy_score_cutoff: 85
 
-# Regex for the time parsing (minutes-based, 'Xh Ym' format)
+# Regex for the time parsing (minutes-based, DdHhMm format)
 time_regex: '(\d+)\s*h(?:our)?s?\s*(\d+)\s*m(?:in)?|(\d+)\s*h(?:our)?s?|(\d+)\s*m(?:in)?'
 
 # Feature Settings
