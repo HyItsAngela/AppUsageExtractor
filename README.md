@@ -170,13 +170,13 @@ results/
 
 
 ### CSV Report Example
-```text
+
 | device_id | total_usage |   Facebook   |   Snapchat   |    WhatsApp   |    Calendar   |
 |-----------|-------------|--------------|--------------|---------------|---------------|
 | OWL1234   | 4h15m       | 2h30m        | 1h15m        | 30m           | 0m            |
 | OWL5678   | 6h22m       | 3h45m        | 45m          | 1h12m         | 40m           |
 | OWL9012   | 3h08m       | 1h15m        | 1h30m        | 15m           | 8m            |
-```
+
 
 ## 📊 Model Information
 **Custom YOLO Model**
@@ -200,16 +200,18 @@ models/
 > The `best.pt` model weights file is managed using Git Large File Storage (LFS). Ensure you have Git LFS installed (`git lfs install`) before cloning to download the model file correctly.
 
 ## 🧮 Performance Benchmarks
-Performance metrics depend heavily on the hardware (CPU, GPU, RAM) and the complexity/resolution of the input images. The following are example figures obtained on e.g., NVIDIA RTX 2070 GPU, Intel i7 CPU:
+Performance metrics depend heavily on the hardware (CPU, GPU, RAM) and the complexity/resolution of the input images. The following are example figures obtained on NVIDIA RTX 2070 GPU, Intel i7 CPU, **without using GPU accelerated packages**:
 
-```text
-Batch Processing Rate
+
+Batch Processing Rate:
 
 | Mode         | Images Processed | Total Time (hh\:mm\:ss) | Images per Minute | Images per Second |
 | ------------ | ---------------- | ----------------------- | ----------------- | ----------------- |
 | --debug      | 3,376            | 03:53:13                | 14.47             | 0.241             |
-| no --debug   | 3,376            | x                       | x                 | x                 |
-```
+| no --debug   | 3,376            | 02:39:13                | 21.20             | 0.354             |
+
+Disabling `--debug` improved the processing speed, increasing output by about **46.6%**. The `--no-debug` mode handles over **6.7 more images per minute**, cutting the total runtime by more than **1 hour**.
+
 > [!NOTE]
 > Enabling `--debug` significantly increases processing time due to saving detailed logs and generating/saving visualization images for each input image.
 > Performance can be improved by using a compatible GPU for both YOLO detection and PaddleOCR inference (`use_gpu_ocr: true in config` and installing `paddlepaddle-gpu`).
@@ -220,9 +222,11 @@ Batch Processing Rate
 * Layout analysis assumes a relatively standard list or grid format. Unusual UI layouts might lead to incorrect name/usage matching. Additionally, although the layout analysis is robust enough to handle horizontal phones, it may not be able to catch all errors. Ideally, the input image should be a screenshot or an straight shot of an image of the phone with minimal background clutter.
 * Current lanyout analysis does not work on images of phones that have distorted perspectives.
 * Filename-based ID extraction is currently optimized for Dr. Dougall's specific use case where her participant identifiers have a unique code followed by OWL under multiple phone images. i.e., OWL10021Phone1.jpg, OWL10021Phone2.jpg, ..., OWL10021PhoneX.jpg.
+* This pipeline can only extract english app names.
 * **Future Work**
   * Explore alternative detection/OCR engines
   * Enhance OCR correction models
+  * Increase the library of app names
 
 ## 📦 Installation
 ```bash
@@ -256,5 +260,4 @@ python scripts/batch_process.py \
   --input-dir path/to/screenshots/ \
   --output-dir results/ \
   --config configs/default.yaml \
-  --batch-size 16 \
 
