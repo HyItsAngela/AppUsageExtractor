@@ -17,8 +17,8 @@ logger = logging.getLogger(__name__)
 
 def main():
     parser = argparse.ArgumentParser(description="Process a single smartphone usage screenshot (High Fidelity).")
-    parser.add_argument("--input-dir", required=True, help="Path to the input image file.")
-    parser.add_argument("--output-dir", default=None, help="Directory to save output files (uses config default if not set).")
+    parser.add_argument("--input", required=True, help="Path to the input image file.")
+    parser.add_argument("--output", default=None, help="Directory to save output files (uses config default if not set).")
     parser.add_argument("--config", default="configs/default.yaml", help="Path to the configuration YAML file.")
     parser.add_argument("--debug", action='store_true', default=None, help="Enable debug mode (saves visualization image & detailed txt). Overrides config.")
     parser.add_argument("--no-debug", action='store_true', default=None, help="Disable debug mode. Overrides --debug and config.")
