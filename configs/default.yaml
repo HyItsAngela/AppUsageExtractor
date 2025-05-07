@@ -31,7 +31,7 @@ ref_line_max_angle: 35   # Max angle deviation (degrees) between segments
 # Parsing & Layout Configuration
 fuzzy_name_threshold: 90             # Primary threshold for match_app_name
 fuzzy_name_secondary_threshold: 75   # Secondary threshold for match_app_name
-fuzzy_char_threshold: 85             # Char similarity threshold for fuzzy_replace_characters
+fuzzy_char_threshold: 60             # Char similarity threshold for fuzzy_replace_characters
 fuzzy_word_threshold: 80             # Overall word similarity threshold for fuzzy_replace_characters
 
 # Threshold for the get_best_match
